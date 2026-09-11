@@ -1,0 +1,178 @@
+import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { once } from "node:events";
+import { mkdir, mkdtemp, rm } from "node:fs/promises";
+import { createServer } from "node:net";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { test } from "node:test";
+import { promisify } from "node:util";
+import { chromium, expect } from "@playwright/test";
+import { createPairServer } from "../apps/pair-server/dist/index.cjs";
+
+const run = promisify(execFile);
+test(
+  "task pane pairs, approves encrypted workbook changes and remembers terminals",
+  { timeout: 60_000 },
+  async () => {
+    const probe = createServer();
+    probe.listen(0, "127.0.0.1");
+    await once(probe, "listening");
+    const port = probe.address().port;
+    await new Promise((done) => probe.close(done));
+    const origin = `http://127.0.0.1:${port}`;
+    const server = await createPairServer({
+      port,
+      publicOrigin: origin,
+      staticDirectory: resolve("apps/pair-addin/dist"),
+    });
+    const browser = await chromium.launch();
+    const profile = await mkdtemp(join(tmpdir(), "pair-browser-"));
+    const environment = { ...process.env, AI_CDL_PAIR_HOME: profile };
+    delete environment.AI_CDL_PAIR_URL;
+    delete environment.AI_CDL_PAIR_SESSION;
+    const bridge = (args, url) =>
+      run(process.execPath, ["skills/ai-cdl-pair/scripts/session.mjs", ...args], {
+        env: { ...environment, ...(url ? { AI_CDL_PAIR_URL: url } : {}) },
+      }).then(({ stdout }) => JSON.parse(stdout));
+    const rpc = (method, params) =>
+      bridge(["request", "--name", "desk", "--method", method, "--params", JSON.stringify(params)]);
+    const page = await browser.newPage({ viewport: { width: 320, height: 900 } });
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    // A browser preview deliberately uses the in-memory adapter, without the Office bootstrap.
+    await page.route("https://appsforoffice.microsoft.com/**", (route) => route.abort());
+    try {
+      await page.goto(origin);
+      await expect(page.getByRole("heading", { name: "Connect your terminal" })).toBeVisible();
+      await mkdir("artifacts/pair-review", { recursive: true });
+      await page.screenshot({ path: "artifacts/pair-review/initial-320.png", fullPage: true });
+      await page.getByLabel("Name this terminal").fill("Codex · Synthetic desk");
+      await page.getByRole("button", { name: "Pair a terminal", exact: true }).click();
+      await expect(page.getByRole("button", { name: "Copy connection URL" })).toBeVisible();
+      await page.screenshot({ path: "artifacts/pair-review/pairing-320.png", fullPage: true });
+      const url = await page.getByLabel("Private connection URL", { exact: true }).inputValue();
+      await bridge(["start", "--name", "desk"], url);
+      await expect(
+        page.getByText("Connected · end-to-end encrypted", { exact: true }),
+      ).toBeVisible();
+      await page
+        .getByRole("textbox", { name: "Message your paired agent" })
+        .fill("Read my synthetic selection");
+      await page.getByRole("button", { name: "Send", exact: true }).click();
+      const next = await bridge(["next", "--name", "desk", "--timeout", "1000"]);
+      assert.equal(next.message.content, "Read my synthetic selection");
+      const range = { sheetId: "Sheet1", address: "B2" };
+      assert.deepEqual((await rpc("excel.range.read", { range })).result.values, [[10]]);
+      const preview = await rpc("excel.operation.preview", {
+        method: "excel.range.write",
+        params: { range, values: [[42]] },
+      });
+      assert.equal(preview.ok, true);
+      const committed = rpc("excel.operation.commit", {
+        operationId: preview.result.operationId,
+      }).catch((error) => ({ error: error.message }));
+      await expect(page.getByRole("alertdialog")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Reject", exact: true })).toBeFocused();
+      await page.keyboard.press("Shift+Tab");
+      await expect(page.getByRole("button", { name: "Approve once", exact: true })).toBeFocused();
+      await page.screenshot({ path: "artifacts/pair-review/approval-320.png", fullPage: true });
+      await page.getByRole("button", { name: "Approve once", exact: true }).click();
+      assert.equal((await committed).result.status, "committed");
+      assert.deepEqual((await rpc("excel.range.read", { range })).result.values, [[42]]);
+      const chartPreview = await rpc("excel.operation.preview", {
+        method: "excel.chart.create",
+        params: {
+          range: { sheetId: "Sheet1", address: "A1:B3" },
+          name: "Sales",
+          title: "Synthetic sales",
+          chartType: "column",
+        },
+      });
+      const chartCommit = rpc("excel.operation.commit", {
+        operationId: chartPreview.result.operationId,
+      });
+      await expect(page.getByRole("alertdialog")).toContainText('Create column chart "Sales"');
+      await page.screenshot({
+        path: "artifacts/pair-review/chart-approval-320.png",
+        fullPage: true,
+      });
+      await page.getByRole("button", { name: "Approve once", exact: true }).click();
+      assert.equal((await chartCommit).result.status, "committed");
+      assert.equal(
+        (await rpc("excel.chart.list", { sheetId: "Sheet1" })).result.charts[0].name,
+        "Sales",
+      );
+      await page.getByText("Recent operations (2)", { exact: true }).click();
+      await expect(page.getByRole("button", { name: "Undo", exact: true })).toHaveCount(1);
+      await bridge(["reply", "--name", "desk", "--content", "Updated the synthetic amount to 42."]);
+      await expect(
+        page.getByText("Updated the synthetic amount to 42.", { exact: true }),
+      ).toBeVisible();
+      await page.screenshot({ path: "artifacts/pair-review/connected-320.png", fullPage: true });
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+        true,
+      );
+      const saved = await page.evaluate(() =>
+        JSON.parse(localStorage.getItem("ai-cdl-pair-terminals-v1")),
+      );
+      assert.equal(saved.length, 1);
+      assert.equal(saved[0].name, "Codex · Synthetic desk");
+      await page.reload();
+      await expect(page.getByRole("button", { name: "Reconnect", exact: true })).toBeVisible();
+      await expect(page.getByRole("button", { name: "Copy connection URL" })).toHaveCount(0);
+      await page.getByRole("button", { name: "Reconnect", exact: true }).click();
+      await expect(
+        page.getByText("Connected · end-to-end encrypted", { exact: true }),
+      ).toBeVisible();
+      await page.getByText("Manage connection", { exact: true }).click();
+      await page.getByLabel("Connect automatically when this pane opens").check();
+      await page
+        .getByLabel("Approve changes automatically for this connection only. Previews still run.")
+        .check();
+      await page.reload();
+      await expect(
+        page.getByText("Connected · end-to-end encrypted", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByLabel(
+          "Approve changes automatically for this connection only. Previews still run.",
+        ),
+      ).not.toBeChecked();
+      await page.getByText("Manage connection", { exact: true }).click();
+      await page.getByRole("button", { name: "Forget", exact: true }).click();
+      await expect(page.getByRole("button", { name: "Reconnect", exact: true })).toHaveCount(0);
+      assert.equal(
+        await page.evaluate(
+          () => JSON.parse(localStorage.getItem("ai-cdl-pair-terminals-v1")).length,
+        ),
+        0,
+      );
+      assert.deepEqual(errors, []);
+      for (const path of [
+        "/setup.html",
+        "/privacy.html",
+        "/support.html",
+        "/help.css",
+        "/icon-16.png",
+        "/icon-32.png",
+        "/icon-64.png",
+        "/icon-80.png",
+        "/icon-128.png",
+        "/manifest.xml",
+        "/agent/session.mjs",
+        "/agent/lib/encrypted-socket.mjs",
+      ]) {
+        const response = await fetch(`${origin}${path}`);
+        assert.equal(response.status, 200, path);
+        assert.ok((await response.arrayBuffer()).byteLength > 0, path);
+      }
+    } finally {
+      await bridge(["stop", "--name", "desk"]).catch(() => undefined);
+      await browser.close();
+      await server.close();
+      await rm(profile, { recursive: true, force: true });
+    }
+  },
+);

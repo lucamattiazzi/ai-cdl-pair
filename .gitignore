@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+artifacts/
+*.tgz
+*.tsbuildinfo
+.DS_Store
+.env*
+!.env.example
+.vite/
+.office-addin-dev-certs/
+
+skills/ai-cdl-pair/scripts/lib/
+playwright-report/
+test-results/

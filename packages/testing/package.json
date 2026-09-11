@@ -1,0 +1,41 @@
+{
+  "name": "@ai-cdl/testing",
+  "version": "0.1.1",
+  "description": "Virtual workbook, scripted agents, traces, and adapter contract kit for AI-CDL",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "ai-cdl-contract": "./dist/contract-cli.js"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --external @ai-cdl/core --external @ai-cdl/excel && tsup src/contract-cli.ts --format esm --dts --sourcemap --external @ai-cdl/core --external @ai-cdl/agent-http",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "ai-cdl-contract": "tsx src/contract-cli.ts"
+  },
+  "dependencies": {
+    "@ai-cdl/agent-http": "workspace:^",
+    "@ai-cdl/core": "workspace:^",
+    "@ai-cdl/excel": "workspace:^",
+    "commander": "15.0.0",
+    "zod": "4.1.5"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "paths": {
+      "@ai-cdl/protocol": ["packages/protocol/src/index.ts"],
+      "@ai-cdl/transport": ["packages/transport/src/index.ts"],
+      "@ai-cdl/core": ["packages/core/src/index.ts"],
+      "@ai-cdl/excel": ["packages/excel/src/index.ts"],
+      "@ai-cdl/addin-core": ["packages/addin-core/src/index.ts"],
+      "@ai-cdl/pair": ["packages/pair/src/index.ts"],
+      "@ai-cdl/pair-cli": ["packages/pair-cli/src/index.ts"],
+      "@ai-cdl/agent-http": ["packages/agent-http/src/index.ts"],
+      "@ai-cdl/testing": ["packages/testing/src/index.ts"],
+      "@ai-cdl/cli/config": ["packages/cli/src/config.ts"],
+      "@ai-cdl/cli/project": ["packages/cli/src/project.ts"],
+      "@ai-cdl/cli/manifest": ["packages/cli/src/manifest.ts"]
+    },
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true,
+    "skipLibCheck": true
+  }
+}
