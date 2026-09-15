@@ -1,5 +1,11 @@
 # @ai-cdl/agent-http
 
+## 0.2.0-beta.0
+
+### Patch Changes
+
+- @ai-cdl/core@0.2.0-beta.0
+
 ## 0.1.1
 
 ### Patch Changes

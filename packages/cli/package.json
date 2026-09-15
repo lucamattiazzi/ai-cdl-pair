@@ -1,6 +1,6 @@
 {
   "name": "@ai-cdl/cli",
-  "version": "0.1.1",
+  "version": "0.2.0-beta.0",
   "description": "Minimal typed configuration, manifest generation, and packaging CLI for AI-CDL",
   "license": "Apache-2.0",
   "type": "module",
@@ -54,5 +54,14 @@
   },
   "devDependencies": {
     "@types/node": "24.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/lucamattiazzi/ai-cdl-pair#readme",
+  "bugs": {
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair/issues"
   }
 }

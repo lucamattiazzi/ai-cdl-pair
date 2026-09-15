@@ -1,6 +1,6 @@
 {
   "name": "@ai-cdl/transport",
-  "version": "0.1.1",
+  "version": "0.2.0-beta.0",
   "description": "Transport lifecycle and message delivery for AI-CDL",
   "license": "Apache-2.0",
   "type": "module",
@@ -29,5 +29,14 @@
   },
   "dependencies": {
     "@ai-cdl/protocol": "workspace:^"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair.git",
+    "directory": "packages/transport"
+  },
+  "homepage": "https://github.com/lucamattiazzi/ai-cdl-pair#readme",
+  "bugs": {
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair/issues"
   }
 }

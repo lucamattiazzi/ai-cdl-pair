@@ -1,0 +1,22 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@ai-cdl/pair-addin": "0.1.1",
+    "@ai-cdl/pair-server": "0.1.1",
+    "@ai-cdl/addin-core": "0.1.1",
+    "@ai-cdl/agent-http": "0.1.1",
+    "@ai-cdl/cli": "0.1.1",
+    "@ai-cdl/core": "0.1.1",
+    "@ai-cdl/excel": "0.1.1",
+    "@ai-cdl/pair": "0.1.1",
+    "@ai-cdl/pair-cli": "0.1.1",
+    "@ai-cdl/protocol": "0.1.1",
+    "@ai-cdl/testing": "0.1.1",
+    "@ai-cdl/transport": "0.1.1"
+  },
+  "changesets": [
+    "pair-native-adapters",
+    "remembered-encrypted-terminals"
+  ]
+}

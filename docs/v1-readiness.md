@@ -4,6 +4,10 @@ The requested v1 features are implemented in this checkout. This is **not yet a 
 AppSource release**: real Excel validation, interactive Claude channel validation, the OpenCode
 provider configuration and publication ownership/hosting still need attention.
 
+Publication preparation (2026-09-15): repository and npm metadata now target
+`lucamattiazzi/ai-cdl-pair`; packages are versioned `0.2.0-beta.0`. The verification evidence and
+remaining runtime checks below are from 2026-09-11 and do not imply Marketplace certification.
+
 ## Feature inventory
 
 | Requirement | Implementation | Verification / limit |
@@ -72,11 +76,10 @@ are generated under ignored `artifacts/pair-review/`; they show synthetic data, 
 2. **Complete the two harness checks.** Fix the OpenCode provider's 404 and run a real workbook task.
    Start Claude through the launcher, accept channel consent and verify a round trip. Keep Claude
    marked preview: custom Channels still require the development flag and may be blocked by policy.
-3. **Set publication identity and hosting.** This checkout currently has no Git remote. Confirm
-   ownership of the retained `@ai-cdl/*` npm scope, set repository metadata and configure the operator's
+3. **Set publication identity and hosting.** GitHub and npm ownership have been established. Configure the operator's
    HTTPS domain through `PAIR_DOMAIN` (see [self-hosting](../deploy/pair/README.md)),
-   and apply the included Changeset before packing the chosen release version. Nothing was pushed,
-   published, deployed or submitted to Microsoft during this work.
+   and verify the production deployment. No Marketplace submission or hosting deployment is
+   established by the beta package release.
 4. **Finish Marketplace material.** Publisher/support/legal details and genuine Excel screenshots
    remain necessary. See [asset inventory](marketplace-assets.md) and [publishing](publishing.md).
 

@@ -11,10 +11,10 @@ your Pair service operator, or your own self-hosted instance. **End users do not
 The local adapter connects outbound to the instance chosen during pairing; no public inbound port
 or fixed service domain is required on the user's machine.
 
-Once the adapter release is published:
+Install the beta adapter:
 
 ```sh
-npm install -g @ai-cdl/pair-cli
+npm install -g @ai-cdl/pair-cli@beta
 ai-cdl-pair-agent pair --name desk
 ```
 
@@ -23,7 +23,7 @@ It contains the selected server address and a private key: use the local setup p
 chat or a tracked file. Both are remembered locally. There is no central service domain compiled
 into the adapter. Profiles can belong to different self-hosted instances.
 
-Until the adapter release is published, use a trusted source checkout:
+Alternatively, build a trusted source checkout:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -33,7 +33,7 @@ pnpm agent pair --name desk
 ```
 
 In the commands below, replace `ai-cdl-pair-agent` with `pnpm agent` when using that checkout.
-Do not assume the package version currently on npm has these adapters.
+Use the `beta` tag explicitly; stable versions of the shared packages remain on `latest`.
 
 ## Codex
 

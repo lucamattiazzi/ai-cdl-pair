@@ -1,6 +1,6 @@
 # AI-CDL Pair
 
-## v1 harness adapters
+## Beta harness adapters
 
 Connect **Codex, OpenCode or Claude Code** to the TaskPane without repeating a setup prompt.
 [Install and reconnect](docs/harness-adapters.md) · [Release readiness](docs/v1-readiness.md)
@@ -18,7 +18,9 @@ an Agent Skill for shell-capable harnesses such as OpenCode.
 This is an independent Apache-2.0 workspace extracted from AI-CDL. It contains no enterprise
 runtime, tenant authentication/authorization integration, enterprise prospect material, eval
 runner, or currency/commodity demo. Existing `@ai-cdl/*` package names and public APIs are preserved.
-The extraction does not establish npm ownership or publish an add-in or repository.
+Source: [lucamattiazzi/ai-cdl-pair](https://github.com/lucamattiazzi/ai-cdl-pair).
+This beta has not been approved for the Microsoft Marketplace. See the release readiness notes
+for the remaining real Excel and harness validation.
 
 ## Use a hosted instance
 
@@ -26,10 +28,10 @@ Install the add-in supplied by your service operator, or deploy your own instanc
 [Docker/self-hosting guide](deploy/pair/README.md). End users only run the local harness adapter;
 the Pair server runs on the operator's infrastructure.
 
-After the adapter release is published:
+Install from the explicit beta channel:
 
 ```sh
-npm install -g @ai-cdl/pair-cli
+npm install -g @ai-cdl/pair-cli@beta
 ai-cdl-pair-agent pair --name desk
 ai-cdl-pair-agent codex --name desk
 # Or: opencode / claude
@@ -37,7 +39,7 @@ ai-cdl-pair-agent codex --name desk
 
 Paste the private connection URL from Excel once, at the local pairing prompt. The URL selects the
 server and is remembered. There is no fixed hosted domain: self-hosting uses the same adapter and
-E2EE protocol. For the pre-release source installation, see [adapter setup](docs/harness-adapters.md).
+E2EE protocol. For installation from source, see [adapter setup](docs/harness-adapters.md).
 
 ## Local development
 

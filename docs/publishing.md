@@ -1,7 +1,9 @@
 # Publishing Pair
 
-The Excel add-in and npm libraries are separate artifacts. This checkout prepares both; it has
-not been submitted to AppSource, uploaded to a registry, or assigned a remote Git repository.
+The Excel add-in and npm libraries are separate artifacts. The source repository is
+[ai-cdl-pair](https://github.com/lucamattiazzi/ai-cdl-pair). The first independent release is
+`0.2.0-beta.0` on the npm `beta` channel; check registry availability when executing the release.
+Microsoft Marketplace submission and production hosting are separate steps.
 
 ## Libraries
 
@@ -10,14 +12,16 @@ and Apache-2.0 licenses. `@ai-cdl/pair` is the client/session library; `@ai-cdl/
 the local relay plus `ai-cdl-pair-agent`, its bundled encrypted bridge, MCP tools and native
 harness adapters. See [v1 readiness](v1-readiness.md) before release. The root workspace and the two applications remain private npm packages.
 
-Before release, choose the release owner for the retained `@ai-cdl/*` names, confirm npm scope
-access, and set repository metadata to the actual new public repository. Versions remain `0.1.1`
-from the source revision; check registry state before choosing the release version.
+The `lucamattiazzi` account owns the `@ai-cdl` npm organization (verified 2026-09-15).
+Repository metadata points to this checkout. The shared packages already published as `0.1.1`
+keep their stable `latest` tags; prereleases must use `beta`. Do not independently release the
+same package/version from the original AI-CDL repository.
 
 ```sh
 pnpm build
 pnpm smoke:packages
 pnpm smoke:consumer
+# Already in beta prerelease mode; add a Changeset for the next change.
 pnpm changeset
 pnpm changeset version
 pnpm build
@@ -25,7 +29,7 @@ pnpm smoke:consumer
 ```
 
 Review the generated version changes and release notes. Changesets groups the ten libraries into
-one fixed release set. Run `pnpm exec changeset publish` only when ready to publish that release.
+one fixed release set. Run `pnpm exec changeset publish --tag beta` when ready to publish a beta release.
 There is deliberately no workflow that publishes on push.
 
 To inspect a single package without publishing:

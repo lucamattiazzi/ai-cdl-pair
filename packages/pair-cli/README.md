@@ -4,6 +4,7 @@
 Node.js 22.12+ and a signed-in harness. The included skill, bridge and crypto are self-contained.
 
 ```sh
+npm install -g @ai-cdl/pair-cli@beta
 ai-cdl-pair-agent pair --name desk
 ai-cdl-pair-agent codex --name desk
 # Or: opencode --name desk

@@ -41,5 +41,13 @@
     "typescript": "5.9.2",
     "vitest": "4.1.11"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair.git"
+  },
+  "homepage": "https://github.com/lucamattiazzi/ai-cdl-pair#readme",
+  "bugs": {
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair/issues"
+  }
 }

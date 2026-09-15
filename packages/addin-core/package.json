@@ -1,6 +1,6 @@
 {
   "name": "@ai-cdl/addin-core",
-  "version": "0.1.1",
+  "version": "0.2.0-beta.0",
   "description": "Host-agnostic Excel add-in runtime for AI-CDL",
   "license": "Apache-2.0",
   "type": "module",
@@ -30,5 +30,14 @@
   "dependencies": {
     "@ai-cdl/excel": "workspace:^",
     "@ai-cdl/protocol": "workspace:^"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair.git",
+    "directory": "packages/addin-core"
+  },
+  "homepage": "https://github.com/lucamattiazzi/ai-cdl-pair#readme",
+  "bugs": {
+    "url": "https://github.com/lucamattiazzi/ai-cdl-pair/issues"
   }
 }

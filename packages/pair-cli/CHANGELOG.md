@@ -1,4 +1,4 @@
-# @ai-cdl/excel
+# @ai-cdl/pair-cli
 
 ## 0.2.0-beta.0
 
@@ -14,13 +14,12 @@
 
 ### Patch Changes
 
-- @ai-cdl/core@0.2.0-beta.0
+- 5c48cc5: Add authenticated end-to-end encrypted socket helpers and stable Pair identities, keeping encrypted
+  framing separate from workbook RPC. Support correctly sized Office manifest icons and same-origin
+  support pages. The Pair application now uses remembered terminal connections and disables its
+  legacy plaintext hosted routes by default.
 
-## 0.1.1
+  Update ws to 8.21.0 and the js-yaml lockfile resolution to patched releases.
 
-### Patch Changes
-
-- 40387f7: Ship the coordinated package release, minimal CLI split, reusable OpenAI-compatible bridge,
-  read-only doctor, external-consumer smoke coverage, and configurable contract timeout.
-- Updated dependencies [40387f7]
-  - @ai-cdl/core@0.1.1
+- Updated dependencies [5c48cc5]
+  - @ai-cdl/protocol@0.2.0-beta.0

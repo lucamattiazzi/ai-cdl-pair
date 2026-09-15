@@ -1,5 +1,14 @@
 # @ai-cdl/testing
 
+## 0.2.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies [5c48cc5]
+  - @ai-cdl/excel@0.2.0-beta.0
+  - @ai-cdl/agent-http@0.2.0-beta.0
+  - @ai-cdl/core@0.2.0-beta.0
+
 ## 0.1.1
 
 ### Patch Changes

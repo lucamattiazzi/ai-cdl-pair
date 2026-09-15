@@ -1,4 +1,4 @@
-# @ai-cdl/cli
+# @ai-cdl/transport
 
 ## 0.2.0-beta.0
 
@@ -11,9 +11,7 @@
 
   Update ws to 8.21.0 and the js-yaml lockfile resolution to patched releases.
 
-## 0.1.1
-
 ### Patch Changes
 
-- 40387f7: Ship the coordinated package release, minimal CLI split, reusable OpenAI-compatible bridge,
-  read-only doctor, external-consumer smoke coverage, and configurable contract timeout.
+- Updated dependencies [5c48cc5]
+  - @ai-cdl/protocol@0.2.0-beta.0
