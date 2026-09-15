@@ -27,7 +27,8 @@
     "harness:install": "node scripts/install-harness.mjs",
     "test:harness": "node --test scripts/install-harness.test.mjs",
     "test:browser": "node --test scripts/pair-browser.test.mjs",
-    "agent": "node packages/pair-cli/dist/agent.js"
+    "agent": "node packages/pair-cli/dist/agent.js",
+    "release:beta": "pnpm -r --filter \"./packages/**\" publish --tag beta --access public --publish-branch main"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",

@@ -28,7 +28,8 @@ Install the add-in supplied by your service operator, or deploy your own instanc
 [Docker/self-hosting guide](deploy/pair/README.md). End users only run the local harness adapter;
 the Pair server runs on the operator's infrastructure.
 
-Install from the explicit beta channel:
+**npm publication is pending publisher two-factor authentication.** Once available, install
+from the explicit beta channel:
 
 ```sh
 npm install -g @ai-cdl/pair-cli@beta

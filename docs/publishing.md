@@ -29,7 +29,11 @@ pnpm smoke:consumer
 ```
 
 Review the generated version changes and release notes. Changesets groups the ten libraries into
-one fixed release set. Run `pnpm exec changeset publish --tag beta` when ready to publish a beta release.
+one fixed release set. Run `pnpm release:beta` when ready to publish a beta release. This sets the `beta` tag explicitly
+for every package, including packages with no previous npm release; Changesets prerelease
+publishing would otherwise put those new packages on `latest`. Complete npm two-factor
+authentication in your terminal when prompted. To inspect the upload without publishing, run
+`pnpm release:beta --dry-run`.
 There is deliberately no workflow that publishes on push.
 
 To inspect a single package without publishing:
