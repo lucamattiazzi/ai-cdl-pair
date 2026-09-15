@@ -190,6 +190,7 @@ async function runDaemon(controlPath) {
   };
   const attachSocket = (current) => {
     const socket = current;
+    let closed = false;
 
     const confirmReady = () => {
       if (state !== "open") return;
@@ -199,6 +200,7 @@ async function runDaemon(controlPath) {
     };
 
     socket.addEventListener("open", () => {
+      if (closed) return;
       trace("connection", { state: "open" });
       state = "open";
       retryDelay = 500;
@@ -206,14 +208,9 @@ async function runDaemon(controlPath) {
       readyTimer = setTimeout(confirmReady, 300);
     });
 
-    socket.addEventListener("error", () => {
-      if (state === "connecting" && !ready) {
-        handshake({ ok: false, error: "Could not connect to the AI-CDL Pair URL." });
-        shutdown(1);
-      }
-    });
-
-    socket.addEventListener("close", (event) => {
+    const onClose = (event) => {
+      if (closed) return;
+      closed = true;
       trace("connection", { state: "closed" });
       state = "closed";
       peerConnected = false;
@@ -235,9 +232,23 @@ async function runDaemon(controlPath) {
         retryTimer = setTimeout(connectRelay, retryDelay);
         retryDelay = Math.min(retryDelay * 2, 30_000);
       } else exitTimer = setTimeout(() => shutdown(0), CLOSED_SESSION_GRACE_MS);
+    };
+    socket.addEventListener("close", onClose);
+    socket.addEventListener("error", () => {
+      if (closed) return;
+      if (state === "connecting" && !ready) {
+        handshake({ ok: false, error: "Could not connect to the AI-CDL Pair URL." });
+        shutdown(1);
+      }
+      // Node 22 may emit only error when a reconnect is refused, without a close event.
+      onClose({ code: 1006, reason: "Connection failed." });
+      try {
+        socket.close();
+      } catch {}
     });
 
     socket.addEventListener("message", (event) => {
+      if (closed) return;
       confirmReady();
       let message;
       try {

@@ -14,6 +14,9 @@
 
 ### Patch Changes
 
+- Keep the bridge reconnecting on Node 22 after refused connections that emit only an error event.
+  Deduplicate error/close handling and discard events from failed sockets.
+
 - 5c48cc5: Add authenticated end-to-end encrypted socket helpers and stable Pair identities, keeping encrypted
   framing separate from workbook RPC. Support correctly sized Office manifest icons and same-origin
   support pages. The Pair application now uses remembered terminal connections and disables its

@@ -10,3 +10,6 @@ support pages. The Pair application now uses remembered terminal connections and
 legacy plaintext hosted routes by default.
 
 Update ws to 8.21.0 and the js-yaml lockfile resolution to patched releases.
+
+Keep the persistent bridge reconnecting on Node 22 when a refused connection emits an error
+without a close event. Handle each failed socket once and never replay pending workbook requests.
